@@ -11,10 +11,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:v1.20.2
+    - ghcr.io/rook/rook-ceph-cluster:v1.20.3
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:v1.20.2
+    - ghcr.io/rook/rook-ceph:v1.20.3
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
