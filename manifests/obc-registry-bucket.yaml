@@ -1,0 +1,12 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: registry-bucket
+  namespace: zarf
+spec:
+  bucketName: registry-bucket
+  storageClassName: ceph-bucket
+  additionalConfig:
+    maxObjects: "100000000"
+    maxSize: "###ZARF_VAR_ROOK_CEPH_S3_BUCKET_SIZE###"

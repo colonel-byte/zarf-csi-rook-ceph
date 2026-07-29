@@ -1,0 +1,185 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+kind: ZarfPackageConfig
+metadata:
+  name: csi-rook-ceph
+  version: v1.20.2
+  source: https://github.com/colonel-byte/zarf-csi-rook-ceph
+  annotations:
+    org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
+    org.opencontainers.image.description: Zarf package for deploying rook-ceph
+x-charts:
+  cluster:
+    # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
+    - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+  operator:
+    # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
+    - ghcr.io/rook/rook-ceph:v1.20.3
+variables:
+  - name: ROOK_CEPH_DATA_DIR
+    default: /var/lib/rook
+    description: |-
+      where the rook-ceph data lives
+  - name: KUBELET_DATA_DIR
+    default: /var/lib/kubelet
+    description: |-
+      where the kubelet directory lives
+  - name: ROOK_CEPH_S3_BUCKET_SIZE
+    default: 72G
+    description: |-
+      how much space the zarf bucket is allowed to take up
+  - name: NODE_INFRASTRUCTURE_LABEL
+    default: adrp.xyz/is-infra
+    description: |-
+      kubernets label that is used to indicate nodes that are used for infrastructure purposes
+components:
+  - name: operator-images
+    required: false
+    only:
+      flavor: upstream
+    images:
+      - ghcr.io/rook/ceph:v1.20.3
+      - ghcr.io/rook/rook-ceph:v1.20.3
+      - quay.io/cephcsi/ceph-csi-operator:v1.0.4
+      - quay.io/cephcsi/cephcsi:v3.17.0
+      - quay.io/csiaddons/k8s-sidecar:v0.14.0
+      - registry.k8s.io/sig-storage/csi-attacher:v4.12.0
+      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
+      - registry.k8s.io/sig-storage/csi-provisioner:v6.2.0
+      - registry.k8s.io/sig-storage/csi-resizer:v2.1.0
+      - registry.k8s.io/sig-storage/csi-snapshotter:v8.5.0
+  - name: cluster-images
+    required: false
+    only:
+      flavor: upstream
+    images:
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+      - quay.io/ceph/ceph:v20.2.2
+  - name: operator-seed-chart
+    required: false
+    only:
+      flavor: upstream
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/upstream-operator-seed.yml
+  - name: cluster-seed-chart
+    required: false
+    only:
+      flavor: upstream
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/upstream-cluster-seed.yml
+  - name: operator-chart
+    required: false
+    only:
+      flavor: upstream
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/upstream-operator.yml
+  - name: cluster-chart
+    required: false
+    only:
+      flavor: upstream
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/upstream-cluster.yml
+  - name: operator-images
+    required: false
+    only:
+      flavor: minimus
+    images:
+      - ghcr.io/rook/rook-ceph:v1.20.3
+      - reg.mini.dev/ceph-csi-operator:v1.0.4
+      - reg.mini.dev/cephcsi:v3.17.0
+      - reg.mini.dev/k8s-sidecar:v2.8.1
+      - reg.mini.dev/kubernetes-csi-attacher:v4.12.0
+      - reg.mini.dev/kubernetes-csi-external-resizer:v2.2.1
+      - reg.mini.dev/kubernetes-csi-external-snapshotter:v8.6.0
+      - reg.mini.dev/kubernetes-csi-node-driver-registrar:v2.17.0
+      - reg.mini.dev/kubernetes-csi-provisioner:v6.3.0
+      - reg.mini.dev/rook-ceph:v1.20.3
+  - name: cluster-images
+    required: false
+    only:
+      flavor: minimus
+    images:
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+      - reg.mini.dev/ceph:v20.2.2
+  - name: operator-seed-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/minimus-operator-seed.yml
+  - name: cluster-seed-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/minimus-cluster-seed.yml
+  - name: operator-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./operator
+      name: operator-chart
+    charts:
+      - name: rook-ceph
+        valuesFiles:
+          - values/minimus-operator.yml
+  - name: cluster-chart
+    required: false
+    only:
+      flavor: minimus
+    import:
+      path: ./cluster
+      name: cluster-chart
+    charts:
+      - name: rook-ceph-cluster
+        valuesFiles:
+          - values/minimus-cluster.yml
+  - name: registry-bucket
+    required: false
+    manifests:
+      - name: registry-bucket
+        namespace: zarf
+        files:
+          - manifests/obc-registry-bucket.yaml
+    actions:
+      onDeploy:
+        after:
+          - wait:
+              cluster:
+                kind: ObjectBucketClaim
+                name: registry-bucket
+                condition: "'{.status.phase}'=Bound"
+                namespace: zarf
+            maxTotalSeconds: 2700
+            description: Waiting for ceph bucket to be created and bound
