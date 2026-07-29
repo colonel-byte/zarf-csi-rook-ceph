@@ -17,7 +17,6 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: Configure gitsign
@@ -40,16 +39,10 @@ jobs:
         run: |-
           ./.github/hack/zarf.sh
 
-      - name: Get last commit message
-        id: last-commit
-        run: |
-          echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
-          echo "author=$(git log -1 --pretty=\"%an <%ae>\")" >> $GITHUB_OUTPUT
-
       - uses: stefanzweifel/git-auto-commit-action@4a55954c782fc1ea30b9056cd3e7a2b40ca8887d # v7.2.0
         with:
-          commit_author: |-
-            renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
-          commit_message: ${{ steps.last-commit.outputs.message }}
-          commit_options: '--amend --no-edit'
-          push_options: '--force'
+          branch: ${{ github.head_ref }}
+          message: "chore(resources): updated resources files"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          author_name: renovate[bot]
+          author_email: <29139614+renovate[bot]@users.noreply.github.com>
