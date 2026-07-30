@@ -3,7 +3,8 @@
 kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
-  version: v1.20.2
+  # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
+  version: v1.20.3
   source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
