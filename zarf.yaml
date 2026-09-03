@@ -4,7 +4,7 @@ kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
   # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-  version: v1.20.3
+  version: v1.20.7
   source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
@@ -12,10 +12,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+    - ghcr.io/rook/rook-ceph-cluster:v1.20.7
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:v1.20.3
+    - ghcr.io/rook/rook-ceph:v1.20.7
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
