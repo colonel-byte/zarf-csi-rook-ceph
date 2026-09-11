@@ -4,7 +4,7 @@ kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
   # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-  version: v1.20.3
+  version: v1.20.7
   source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
@@ -12,10 +12,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+    - ghcr.io/rook/rook-ceph-cluster:v1.20.7
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:v1.20.3
+    - ghcr.io/rook/rook-ceph:v1.20.7
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
@@ -39,10 +39,10 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.20.3
-      - ghcr.io/rook/rook-ceph:v1.20.3
+      - ghcr.io/rook/ceph:v1.20.7
+      - ghcr.io/rook/rook-ceph:v1.20.7
       - quay.io/cephcsi/ceph-csi-operator:v1.0.4
-      - quay.io/cephcsi/cephcsi:v3.17.0
+      - quay.io/cephcsi/cephcsi:v3.17.1
       - quay.io/csiaddons/k8s-sidecar:v0.14.0
       - registry.k8s.io/sig-storage/csi-attacher:v4.12.0
       - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
@@ -54,8 +54,9 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.7
       - quay.io/ceph/ceph:v20.2.2
+      - quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
     required: false
     only:
@@ -105,23 +106,24 @@ components:
     only:
       flavor: minimus
     images:
-      - ghcr.io/rook/rook-ceph:v1.20.3
+      - ghcr.io/rook/rook-ceph:v1.20.7
       - reg.mini.dev/ceph-csi-operator:v1.0.4
-      - reg.mini.dev/cephcsi:v3.17.0
+      - reg.mini.dev/cephcsi:v3.17.1
       - reg.mini.dev/k8s-sidecar:v2.8.1
       - reg.mini.dev/kubernetes-csi-attacher:v4.12.0
       - reg.mini.dev/kubernetes-csi-external-resizer:v2.2.1
       - reg.mini.dev/kubernetes-csi-external-snapshotter:v8.6.0
       - reg.mini.dev/kubernetes-csi-node-driver-registrar:v2.17.0
       - reg.mini.dev/kubernetes-csi-provisioner:v6.3.0
-      - reg.mini.dev/rook-ceph:v1.20.3
+      - reg.mini.dev/rook-ceph:v1.20.7
   - name: cluster-images
     required: false
     only:
       flavor: minimus
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.20.3
+      - ghcr.io/rook/rook-ceph-cluster:v1.20.7
       - reg.mini.dev/ceph:v20.2.2
+      - reg.mini.dev/ceph:v20.2.4
   - name: operator-seed-chart
     required: false
     only:
