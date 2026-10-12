@@ -39,22 +39,15 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.20.7
-      - ghcr.io/rook/rook-ceph:v1.20.7
-      - quay.io/cephcsi/ceph-csi-operator:v1.0.4
-      - quay.io/cephcsi/cephcsi:v3.17.1
-      - quay.io/csiaddons/k8s-sidecar:v0.14.0
-      - registry.k8s.io/sig-storage/csi-attacher:v4.12.0
-      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.17.0
-      - registry.k8s.io/sig-storage/csi-provisioner:v6.2.0
-      - registry.k8s.io/sig-storage/csi-resizer:v2.1.0
-      - registry.k8s.io/sig-storage/csi-snapshotter:v8.5.0
+      - ghcr.io/rook/ceph:v1.21.0
+      - ghcr.io/rook/rook-ceph:1.21.0
+      - quay.io/cephcsi/ceph-csi-operator:v1.1.0
   - name: cluster-images
     required: false
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.20.7
+      - ghcr.io/rook/rook-ceph-cluster:1.21.0
       - quay.io/ceph/ceph:v20.2.2
       - quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
@@ -106,22 +99,20 @@ components:
     only:
       flavor: minimus
     images:
-      - ghcr.io/rook/rook-ceph:v1.20.7
-      - reg.mini.dev/ceph-csi-operator:v1.0.4
-      - reg.mini.dev/cephcsi:v3.17.1
+      - ghcr.io/rook/rook-ceph:1.21.0
+      - reg.mini.dev/ceph-csi-operator:v1.1.0
       - reg.mini.dev/k8s-sidecar:v2.8.1
       - reg.mini.dev/kubernetes-csi-attacher:v4.12.0
       - reg.mini.dev/kubernetes-csi-external-resizer:v2.2.1
       - reg.mini.dev/kubernetes-csi-external-snapshotter:v8.6.0
-      - reg.mini.dev/kubernetes-csi-node-driver-registrar:v2.17.0
       - reg.mini.dev/kubernetes-csi-provisioner:v6.3.0
-      - reg.mini.dev/rook-ceph:v1.20.7
+      - reg.mini.dev/rook-ceph:v1.21.0
   - name: cluster-images
     required: false
     only:
       flavor: minimus
     images:
-      - ghcr.io/rook/rook-ceph-cluster:v1.20.7
+      - ghcr.io/rook/rook-ceph-cluster:1.21.0
       - reg.mini.dev/ceph:v20.2.2
       - reg.mini.dev/ceph:v20.2.4
   - name: operator-seed-chart
