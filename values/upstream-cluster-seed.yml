@@ -1,5 +1,8 @@
 ---
 cephImage:
   repository: ###ZARF_REGISTRY###/ceph/ceph
+  # renovate-ceph
+  tag: v20.2.4
 toolbox:
-  image: ###ZARF_REGISTRY###/ceph/ceph:v20.2.2
+  # renovate-ceph
+  image: ###ZARF_REGISTRY###/ceph/ceph:v20.2.4

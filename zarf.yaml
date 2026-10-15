@@ -3,8 +3,8 @@
 kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
-  # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-  version: 1.21.0
+  # renovate-version: datasource=docker depName=ghcr.io/rook/rook-ceph
+  version: v1.21.0
   source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
@@ -42,13 +42,19 @@ components:
       - ghcr.io/rook/ceph:v1.21.0
       - ghcr.io/rook/rook-ceph:1.21.0
       - quay.io/cephcsi/ceph-csi-operator:v1.1.0
+      - quay.io/cephcsi/cephcsi:v3.18.1
+      - quay.io/csiaddons/k8s-sidecar:v0.15.1
+      - registry.k8s.io/sig-storage/csi-attacher:v4.13.0
+      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.18.0
+      - registry.k8s.io/sig-storage/csi-provisioner:v6.3.0
+      - registry.k8s.io/sig-storage/csi-resizer:v2.2.1
+      - registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
   - name: cluster-images
     required: false
     only:
       flavor: upstream
     images:
       - ghcr.io/rook/rook-ceph-cluster:1.21.0
-      - quay.io/ceph/ceph:v20.2.2
       - quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
     required: false
@@ -94,71 +100,6 @@ components:
       - name: rook-ceph-cluster
         valuesFiles:
           - values/upstream-cluster.yml
-  - name: operator-images
-    required: false
-    only:
-      flavor: minimus
-    images:
-      - ghcr.io/rook/rook-ceph:1.21.0
-      - reg.mini.dev/ceph-csi-operator:v1.1.0
-      - reg.mini.dev/k8s-sidecar:v2.8.1
-      - reg.mini.dev/kubernetes-csi-attacher:v4.12.0
-      - reg.mini.dev/kubernetes-csi-external-resizer:v2.2.1
-      - reg.mini.dev/kubernetes-csi-external-snapshotter:v8.6.0
-      - reg.mini.dev/kubernetes-csi-provisioner:v6.3.0
-      - reg.mini.dev/rook-ceph:v1.21.0
-  - name: cluster-images
-    required: false
-    only:
-      flavor: minimus
-    images:
-      - ghcr.io/rook/rook-ceph-cluster:1.21.0
-      - reg.mini.dev/ceph:v20.2.2
-      - reg.mini.dev/ceph:v20.2.4
-  - name: operator-seed-chart
-    required: false
-    only:
-      flavor: minimus
-    import:
-      path: ./operator
-      name: operator-chart
-    charts:
-      - name: rook-ceph
-        valuesFiles:
-          - values/minimus-operator-seed.yml
-  - name: cluster-seed-chart
-    required: false
-    only:
-      flavor: minimus
-    import:
-      path: ./cluster
-      name: cluster-chart
-    charts:
-      - name: rook-ceph-cluster
-        valuesFiles:
-          - values/minimus-cluster-seed.yml
-  - name: operator-chart
-    required: false
-    only:
-      flavor: minimus
-    import:
-      path: ./operator
-      name: operator-chart
-    charts:
-      - name: rook-ceph
-        valuesFiles:
-          - values/minimus-operator.yml
-  - name: cluster-chart
-    required: false
-    only:
-      flavor: minimus
-    import:
-      path: ./cluster
-      name: cluster-chart
-    charts:
-      - name: rook-ceph-cluster
-        valuesFiles:
-          - values/minimus-cluster.yml
   - name: registry-bucket
     required: false
     manifests:

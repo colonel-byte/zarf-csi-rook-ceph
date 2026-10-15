@@ -1,3 +1,8 @@
 ---
+cephImage:
+  repository: quay.io/ceph/ceph
+  # renovate-ceph
+  tag: v20.2.4
 toolbox:
-  image: quay.io/ceph/ceph:v20.2.2
+  # renovate-ceph
+  image: quay.io/ceph/ceph:v20.2.4

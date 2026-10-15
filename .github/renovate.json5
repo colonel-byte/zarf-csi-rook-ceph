@@ -60,15 +60,54 @@
     },
     {
       customType: "regex",
+      description: [
+        "Zarf package version, which keeps a 'v' prefix the upstream Docker tags do not carry"
+      ],
+      managerFilePatterns: [
+        "/(^|/)zarf\\.yaml$/"
+      ],
+      matchStrings: [
+        "(?m:renovate-version: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s+version: (?<currentValue>\\S+))"
+      ],
+      versioningTemplate: "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
+      autoReplaceStringTemplate: "renovate-version: datasource={{{datasource}}} depName={{{depName}}}\n  version: v{{{newValue}}}",
+    },
+    {
+      customType: "regex",
       datasourceTemplate: "custom.ceph",
       managerFilePatterns: [
         "/^values/.+\\.ya?ml(\\.j2)?$/"
       ],
       versioningTemplate: "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       matchStrings: [
-        "(?m:renovate-ceph\\n\\s+.+:(?<currentValue>(v[0-9\\.]+)))"
+        "(?m:renovate-ceph\\n\\s+.+:(?:\\s+)?(?<currentValue>(v[0-9\\.]+)))"
       ],
       depNameTemplate: "quay.io/ceph/ceph"
     },
-  ]
+    {
+      customType: "regex",
+      description: [
+        "Process custom dependencies"
+      ],
+      managerFilePatterns: [
+        "/(^|/)\\.github/renovate.json(5)?$/"
+      ],
+      matchStrings: [
+        "(?m:renovate:( versioning=(?<versioning>\\S+))?\\n\\s+defaultRegistryUrlTemplate.*?/refs/tags/(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)/)"
+      ],
+      datasourceTemplate: "git-tags",
+      depNameTemplate: "https://github.com/rook/rook.git",
+      versioningTemplate: "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}",
+    },
+  ],
+  customDatasources: {
+    ceph: {
+      // renovate: versioning=regex:^v?(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)$
+      defaultRegistryUrlTemplate: "https://raw.githubusercontent.com/rook/rook/refs/tags/v1.21.0/deploy/charts/rook-ceph-cluster/values.yaml",
+      format: "yaml",
+      transformTemplates: [
+        "{\"releases\": [{\"version\": cephImage.tag, \"sourceUrl\": \"https://github.com/ceph/ceph\"}]}"
+      ]
+    }
+  }
 }

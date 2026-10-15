@@ -1,5 +1,0 @@
----
-cephImage:
-  repository: ###ZARF_REGISTRY###/ceph
-toolbox:
-  image: ###ZARF_REGISTRY###/ceph:v20.2.2
