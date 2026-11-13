@@ -4,7 +4,7 @@ kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
   # renovate-version: datasource=docker depName=ghcr.io/rook/rook-ceph
-  version: v1.21.0
+  version: v1.21.2
   source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
@@ -12,10 +12,10 @@ metadata:
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:1.21.0
+    - ghcr.io/rook/rook-ceph-cluster:1.21.2
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:1.21.0
+    - ghcr.io/rook/rook-ceph:1.21.2
 variables:
   - name: ROOK_CEPH_DATA_DIR
     default: /var/lib/rook
@@ -39,8 +39,8 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.21.0
-      - ghcr.io/rook/rook-ceph:1.21.0
+      - ghcr.io/rook/ceph:v1.21.2
+      - ghcr.io/rook/rook-ceph:1.21.2
       - quay.io/cephcsi/ceph-csi-operator:v1.1.0
       - quay.io/cephcsi/cephcsi:v3.18.1
       - quay.io/csiaddons/k8s-sidecar:v0.15.1
@@ -54,7 +54,7 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:1.21.0
+      - ghcr.io/rook/rook-ceph-cluster:1.21.2
       - quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
     required: false
