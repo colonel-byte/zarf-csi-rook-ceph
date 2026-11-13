@@ -39,8 +39,8 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.21.0
-      - ghcr.io/rook/rook-ceph:1.21.0
+      - ghcr.io/rook/ceph:v1.21.2
+      - ghcr.io/rook/rook-ceph:1.21.2
       - quay.io/cephcsi/ceph-csi-operator:v1.1.0
       - quay.io/cephcsi/cephcsi:v3.18.1
       - quay.io/csiaddons/k8s-sidecar:v0.15.1
@@ -54,7 +54,7 @@ components:
     only:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:1.21.0
+      - ghcr.io/rook/rook-ceph-cluster:1.21.2
       - quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
     required: false
