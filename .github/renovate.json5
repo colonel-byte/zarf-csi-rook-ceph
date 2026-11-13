@@ -67,7 +67,7 @@
         "/(^|/)zarf\\.yaml$/"
       ],
       matchStrings: [
-        "(?m:renovate-version: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s+version: (?<currentValue>\\S+))"
+        "(?m:renovate-version: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s+version: v(?<currentValue>\\S+))"
       ],
       versioningTemplate: "regex:^v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$",
       autoReplaceStringTemplate: "renovate-version: datasource={{{datasource}}} depName={{{depName}}}\n  version: v{{{newValue}}}",
