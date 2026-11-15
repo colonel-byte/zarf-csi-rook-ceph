@@ -1,5 +1,8 @@
 # Zarf Package, Rook-ceph
 
+A `zarf.dev/v1beta1` package. Deploy-time configuration lives in [`values.yaml`](values.yaml);
+override it with `--set-values` or `--values` on `zarf package deploy`.
+
 ## Components:
 - `operator-images`
     - The images required for the rook-ceph operator, this includes the oci helm chart

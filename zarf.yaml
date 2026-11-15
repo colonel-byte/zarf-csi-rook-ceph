@@ -1,115 +1,104 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/zarf-dev/zarf/main/zarf.schema.json
+apiVersion: zarf.dev/v1beta1
 kind: ZarfPackageConfig
 metadata:
   name: csi-rook-ceph
   # renovate-version: datasource=docker depName=ghcr.io/rook/rook-ceph
   version: v1.21.2
-  source: https://github.com/colonel-byte/zarf-csi-rook-ceph
   annotations:
     org.opencontainers.image.source: "https://github.com/colonel-byte/zarf-csi-rook-ceph"
     org.opencontainers.image.description: Zarf package for deploying rook-ceph
 x-charts:
   cluster:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-    - ghcr.io/rook/rook-ceph-cluster:1.21.2
+    - name: ghcr.io/rook/rook-ceph-cluster:1.21.2
   operator:
     # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-    - ghcr.io/rook/rook-ceph:1.21.2
-variables:
-  - name: ROOK_CEPH_DATA_DIR
-    default: /var/lib/rook
-    description: |-
-      where the rook-ceph data lives
-  - name: KUBELET_DATA_DIR
-    default: /var/lib/kubelet
-    description: |-
-      where the kubelet directory lives
-  - name: ROOK_CEPH_S3_BUCKET_SIZE
-    default: 72G
-    description: |-
-      how much space the zarf bucket is allowed to take up
-  - name: NODE_INFRASTRUCTURE_LABEL
-    default: adrp.xyz/is-infra
-    description: |-
-      kubernets label that is used to indicate nodes that are used for infrastructure purposes
+    - name: ghcr.io/rook/rook-ceph:1.21.2
+values:
+  files:
+    - values.yaml
 components:
   - name: operator-images
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     images:
-      - ghcr.io/rook/ceph:v1.21.2
-      - ghcr.io/rook/rook-ceph:1.21.2
-      - quay.io/cephcsi/ceph-csi-operator:v1.1.0
-      - quay.io/cephcsi/cephcsi:v3.18.1
-      - quay.io/csiaddons/k8s-sidecar:v0.15.1
-      - registry.k8s.io/sig-storage/csi-attacher:v4.13.0
-      - registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.18.0
-      - registry.k8s.io/sig-storage/csi-provisioner:v6.3.0
-      - registry.k8s.io/sig-storage/csi-resizer:v2.2.1
-      - registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
+      - name: ghcr.io/rook/ceph:v1.21.2
+      - name: ghcr.io/rook/rook-ceph:1.21.2
+      - name: quay.io/cephcsi/ceph-csi-operator:v1.1.0
+      - name: quay.io/cephcsi/cephcsi:v3.18.1
+      - name: quay.io/csiaddons/k8s-sidecar:v0.15.1
+      - name: registry.k8s.io/sig-storage/csi-attacher:v4.13.0
+      - name: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.18.0
+      - name: registry.k8s.io/sig-storage/csi-provisioner:v6.3.0
+      - name: registry.k8s.io/sig-storage/csi-resizer:v2.2.1
+      - name: registry.k8s.io/sig-storage/csi-snapshotter:v8.6.0
   - name: cluster-images
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     images:
-      - ghcr.io/rook/rook-ceph-cluster:1.21.2
-      - quay.io/ceph/ceph:v20.2.4
+      - name: ghcr.io/rook/rook-ceph-cluster:1.21.2
+      - name: quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     import:
-      path: ./operator
-      name: operator-chart
+      local:
+        - path: ./operator/component.yaml
     charts:
       - name: rook-ceph
         valuesFiles:
-          - values/upstream-operator-seed.yml
+          - path: values/upstream-operator-seed.yml
+            enableTemplating: true
   - name: cluster-seed-chart
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     import:
-      path: ./cluster
-      name: cluster-chart
+      local:
+        - path: ./cluster/component.yaml
     charts:
       - name: rook-ceph-cluster
         valuesFiles:
-          - values/upstream-cluster-seed.yml
+          - path: values/upstream-cluster-seed.yml
+            enableTemplating: true
   - name: operator-chart
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     import:
-      path: ./operator
-      name: operator-chart
+      local:
+        - path: ./operator/component.yaml
     charts:
       - name: rook-ceph
         valuesFiles:
-          - values/upstream-operator.yml
+          - path: values/upstream-operator.yml
   - name: cluster-chart
-    required: false
-    only:
+    optional: true
+    selector:
       flavor: upstream
     import:
-      path: ./cluster
-      name: cluster-chart
+      local:
+        - path: ./cluster/component.yaml
     charts:
       - name: rook-ceph-cluster
         valuesFiles:
-          - values/upstream-cluster.yml
+          - path: values/upstream-cluster.yml
   - name: registry-bucket
-    required: false
+    optional: true
     manifests:
       - name: registry-bucket
         namespace: zarf
+        enableTemplating: true
         files:
           - manifests/obc-registry-bucket.yaml
     actions:
       onDeploy:
-        after:
+        onSuccess:
           - wait:
               cluster:
                 kind: ObjectBucketClaim

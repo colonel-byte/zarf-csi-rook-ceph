@@ -21,7 +21,7 @@ csi:
   provisionerTolerations:
     - key: InfrastructureOnly
       operator: Exists
-  provisionerNodeAffinity: "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###=true"
+  provisionerNodeAffinity: "{{ .Values.nodeInfrastructureLabel }}=true"
 tolerations:
   - operator: "Exists"
 affinity:
@@ -59,7 +59,7 @@ hostpathRequiresPrivileged: true
 # might need this one too for selinux support
 enablePluginSelinuxHostMount: true
 nodeSelector:
-  "###ZARF_VAR_NODE_INFRASTRUCTURE_LABEL###": "true"
+  "{{ .Values.nodeInfrastructureLabel }}": "true"
 admissionController:
   tolerations:
     - operator: "Exists"

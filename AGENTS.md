@@ -4,9 +4,10 @@
 This repository maintains the Zarf package definitions for deploying **Rook Ceph** (`csi-rook-ceph`) on Kubernetes. It packages the Rook operator, Ceph cluster definitions, Ceph CSI drivers (`ceph-csi-operator`), and creates the required storage classes and object bucket claims for air-gapped and connected environments.
 
 ## Repository Layout
-- `zarf.yaml`: Main Zarf package configuration. Defines components (`operator-images`, `cluster-images`, `operator-seed-chart`, `cluster-seed-chart`, `operator-chart`, `cluster-chart`, `registry-bucket`).
-- `operator/zarf.yaml`: Sub-package definition for the Rook Ceph operator chart (`oci://ghcr.io/rook/rook-ceph`).
-- `cluster/zarf.yaml`: Sub-package definition for the Rook Ceph cluster chart (`oci://ghcr.io/rook/rook-ceph-cluster`) and the Ceph CSI drivers Helm chart (`ceph-csi-drivers`).
+- `zarf.yaml`: Main Zarf package configuration (`zarf.dev/v1beta1`). Defines components (`operator-images`, `cluster-images`, `operator-seed-chart`, `cluster-seed-chart`, `operator-chart`, `cluster-chart`, `registry-bucket`).
+- `values.yaml`: Package values (the v1beta1 replacement for `variables`), referenced from `zarf.yaml` under `values.files`.
+- `operator/component.yaml`: `ZarfComponentConfig` for the Rook Ceph operator chart (`oci://ghcr.io/rook/rook-ceph`), imported via `import.local`.
+- `cluster/component.yaml`: `ZarfComponentConfig` for the Rook Ceph cluster chart (`oci://ghcr.io/rook/rook-ceph-cluster`) and the Ceph CSI drivers Helm chart (`ceph-csi-drivers`), imported via `import.local`.
 - `values/`: Helm values files layered during deployment:
   - `base-operator.yml`: Common operator settings (resources, node selector, tolerations, image pull secrets).
   - `base-cluster.yml`: Ceph cluster settings (mon/mgr/osd placement, encryption, storage pools, storage classes).
@@ -26,10 +27,15 @@ This repository maintains the Zarf package definitions for deploying **Rook Ceph
      dedicated `# renovate-version:` marker and a custom manager with an
      `autoReplaceStringTemplate` that re-adds the prefix on every bump. Do not switch it back to
      the shared `# renovate:` marker, which would strip the prefix.
-2. **CSI Images in Air-Gapped Environments:**
+2. **Templating:**
+   - Values files and manifests that need Zarf templating set `enableTemplating: true` and use Go
+     templates: `{{ .Values.<key> }}` for package values and `{{ .State.Registry.Address }}` for the
+     registry. Helm's own `{{ ... }}` in a templated values file must be escaped, e.g.
+     `'{{ "{{ .Release.Namespace }}" }}'`.
+3. **CSI Images in Air-Gapped Environments:**
    - Although Rook v1.21 charts leave CSI sidecar image values empty by default to use `ceph-csi-operator` built-ins, Zarf requires explicit image tags in `values/upstream-operator*.yml` so that all sidecar images are discovered, bundled, and rewritten to local/seed registries.
    - Use `./.github/hack/sync-csi-images.sh` to synchronize CSI sidecar image tags with `ceph-csi-operator`.
-3. **Image Discovery & Verification:**
+4. **Image Discovery & Verification:**
    - Discover images: `zarf dev find-images --flavor upstream --skip-cosign .`
    - Re-sync package images: `./.github/hack/zarf.sh`
    - Package creation test: `zarf package create --confirm --flavor upstream .`

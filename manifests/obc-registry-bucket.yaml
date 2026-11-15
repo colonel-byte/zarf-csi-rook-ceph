@@ -9,4 +9,4 @@ spec:
   storageClassName: ceph-bucket
   additionalConfig:
     maxObjects: "100000000"
-    maxSize: "###ZARF_VAR_ROOK_CEPH_S3_BUCKET_SIZE###"
+    maxSize: "{{ .Values.rookCephS3BucketSize }}"

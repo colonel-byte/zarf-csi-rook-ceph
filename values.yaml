@@ -1,0 +1,9 @@
+---
+# where the rook-ceph data lives
+rookCephDataDir: /var/lib/rook
+# where the kubelet directory lives
+kubeletDataDir: /var/lib/kubelet
+# how much space the zarf bucket is allowed to take up
+rookCephS3BucketSize: 72G
+# kubernetes label that is used to indicate nodes that are used for infrastructure purposes
+nodeInfrastructureLabel: adrp.xyz/is-infra

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Find ceph-csi-drivers version from cluster/zarf.yaml
-CSI_DRIVER_VER=$(yq '.components[].charts[] | select(.name == "ceph-csi-drivers") | .version' cluster/zarf.yaml)
+# Find ceph-csi-drivers version from cluster/component.yaml
+CSI_DRIVER_VER=$(yq '.component.charts[] | select(.name == "ceph-csi-drivers") | .helmRepository.version' cluster/component.yaml)
 echo "::debug::detected ceph-csi-drivers version: ${CSI_DRIVER_VER}"
 
 # Map to ceph-csi-operator tag (e.g. v1.1.0). This assumes the ceph-csi-drivers chart
