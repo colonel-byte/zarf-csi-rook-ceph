@@ -14,7 +14,7 @@ component:
         url: oci://ghcr.io/rook/rook-ceph-cluster
         ref:
           # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph-cluster
-          tag: 1.21.2
+          tag: 1.21.3
       valuesFiles:
         - path: ../values/base-cluster.yml
           enableTemplating: true
