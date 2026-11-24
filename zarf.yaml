@@ -25,8 +25,8 @@ components:
     selector:
       flavor: upstream
     images:
-      - name: ghcr.io/rook/ceph:v1.21.2
-      - name: ghcr.io/rook/rook-ceph:1.21.2
+      - name: ghcr.io/rook/ceph:v1.21.3
+      - name: ghcr.io/rook/rook-ceph:1.21.3
       - name: quay.io/cephcsi/ceph-csi-operator:v1.1.0
       - name: quay.io/cephcsi/cephcsi:v3.18.1
       - name: quay.io/csiaddons/k8s-sidecar:v0.15.1
@@ -40,7 +40,7 @@ components:
     selector:
       flavor: upstream
     images:
-      - name: ghcr.io/rook/rook-ceph-cluster:1.21.2
+      - name: ghcr.io/rook/rook-ceph-cluster:1.21.3
       - name: quay.io/ceph/ceph:v20.2.4
   - name: operator-seed-chart
     optional: true
