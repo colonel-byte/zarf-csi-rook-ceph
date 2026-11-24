@@ -13,7 +13,7 @@ component:
         url: oci://ghcr.io/rook/rook-ceph
         ref:
           # renovate: datasource=docker depName=ghcr.io/rook/rook-ceph
-          tag: 1.21.2
+          tag: 1.21.3
       valuesFiles:
         - path: ../values/base-operator.yml
           enableTemplating: true
